@@ -1,0 +1,7 @@
+
+* 以下命令须在在安装目录../nginx/sbin下执行
+
+1, ./nginx : 启动nginx
+2, ./nginx -v : 查看版本
+3, ./nginx -s stop : 停止nginx
+4, ./nginx -s reload : 重新加载nginx，同时起到重新加载nginx.conf文件的作用
