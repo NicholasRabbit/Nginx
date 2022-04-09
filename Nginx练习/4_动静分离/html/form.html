@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+	
+	<meta charset="ANSI">	
+	<head>
+		<title>表单范例</title>
+	</head>
+	<body>
+		<!--表单指网页中填写密码用户名的空栏，
+		    type属性含义:submit表示提交所填数据, 而且有name属性时才会提交信息
+		-->
+		例1 <br>
+		<form>
+			用户名<input type="text" ></input>  <br>   <!--属性type="text"表示输入框-->
+			密码<input type="password" />    <!--两个标签之间无内容时，可省略后一个标签，而在第一个标签内最后加:/
+			                                    type后面值是password时，在输入框内输入信息自动变为密码星号*-->   
+			<input type="submit" value="确定?"></input>  <!--value属性定义提交按钮上显示的文字-->   
+		</form>
+		<!--注意，<input type="submit"/>标签必学放入<form>标签之内，否则无效，即无法提交-->
+
+		
+		例2 <br>
+		<form action="http://192.168.0.102:8080/html/file">  <!--form中action属性，后边写向哪个url提交信息-->
+			用户名<input type="text" name="username"></input>  <br>  <!--这里只有写name属性，才会向url提交用户名信息，下面密码没name，则不会提交，需写上-->
+			密码  <input type="password" name="passwd" ></input>  <br>  <!--其实name就相当于声明变量，用passwd来接受用户输入的密码-->
+			      <input type="submit"  value="确定"></input>
+				  <input type="reset"  value="重新输入"></input>
+
+		</form>
+
+	</body>
+
+</html>

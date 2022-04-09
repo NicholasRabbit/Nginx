@@ -47,7 +47,7 @@ server {
        
         location / {
             root   html;
-            proxy_pass   http://127.0.0.1:8080  #这里设置被代理的地址，即本地的Tomcat服务器
+            proxy_pass   http://127.0.0.1:8080;  #这里设置被代理的地址，即本地的Tomcat服务器
             index  index.html index.htm;
         }
 }        
@@ -131,7 +131,7 @@ location = | ~ | ~* uri {...}
 
 以使用两个Tomcat为例，使用多个时同理
 
-一，在两个Tomcat中放入相同的项目，例：webapps/web/list.html。Tomcat端口号分别为8081，8082。启动。
+一，在两个Tomcat中放入相同的项目，例：webapps/webproject/list.html。Tomcat端口号分别为8081，8082。启动。
 
 ```html
 8081的list.html
@@ -192,3 +192,50 @@ nginx **分配服务器策略**
 **第四种** **fair****（第三方）** 
 
 **按后端服务器的响应时间来分配请求，响应时间短的优先分配。**
+
+### 9，Nginx配置动静分离
+
+常用的动静分离有两种做法：
+
+一，把静态文件放到一台独立的服务器，处理动态请求的模块放到另一台服务器，这是主流的做法；
+
+二，把静态文件和动态文件放到一个项目里，由nginx来处理区分动静态请求，不常用；
+
+**下面范例使用第一种做法，使用nginx配置动静分离项**：
+
+1）首先在linux本地新建个目录，
+
+​     例 ：/data/html/  :  用来放静态文件， /data/image/  : 放图片
+
+2）配置nginx.conf
+
+```shell
+server {
+    listen       80;    #代理80端口
+    server_name  192.168.30.128;  
+	#设置访问路径，这里root /data/是代表本地根路径”192.168.30.128“，当请求192.168.30.128/html/时，
+	#会以/data/为根目录开始找，类似于Tomcat设置访问图片的映射路径
+    location /html/ {
+    root /data/;    
+    index  index.html index.htm;
+    #autoindex设置为on,表示访问192.168.30.128/html/(这里最有一个斜线要加上，否则访问报错)时，
+    #会显示html文件夹内的所有文件目录,不设置默认为off,无法访问192.168.30.128/html/
+    autoindex on;   
+    }
+    location /image/ {
+    root /data/;
+    #autoindex on;    #这里不设置，默认autoindex为off
+    }
+}        
+```
+
+3）浏览器输入：192.168.30.128/html/ ： 可查看/data/html/文件夹下的目录
+
+​     输入：192.168.30.128/html/static.html : 可访问静态网页
+
+​				192.168.30.128/image/1001.jpg : 可访问图片
+
+   **注意，这里没有用Tomcat，而是通过nginx直接代理访问静态资源**
+
+![1649511376881](note-images/1649511376881.png)
+
