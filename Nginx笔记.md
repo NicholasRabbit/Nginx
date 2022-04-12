@@ -209,6 +209,8 @@ nginx **分配服务器策略**
 
 2）配置nginx.conf
 
+​	 还有使用 expires  3  进行设置，后期待研究
+
 ```shell
 server {
     listen       80;    #代理80端口
@@ -220,7 +222,8 @@ server {
     index  index.html index.htm;
     #autoindex设置为on,表示访问192.168.30.128/html/(这里最有一个斜线要加上，否则访问报错)时，
     #会显示html文件夹内的所有文件目录,不设置默认为off,无法访问192.168.30.128/html/
-    autoindex on;   
+    autoindex on;
+    expires  3 ;  #后期待研究
     }
     location /image/ {
     root /data/;
@@ -239,3 +242,20 @@ server {
 
 ![1649511376881](note-images/1649511376881.png)
 
+### 10，Nginx配置高可用示意图
+
+(1)，什么是高可用？
+
+当一台Tomcat服务器宕机后，还有备份的服务器，防止网站不能访问
+
+一台nginx长时间使用可能也会宕机，因此可配置多态nginx，设置主从代理，一台宕机，还有备份机
+
+(2)，为什么配置高可用？
+
+保证服务不间断
+
+(3)配置方法
+
+
+
+<img src="note-images/1649768520935.png" alt="1649768520935" style="zoom:50%;" />
