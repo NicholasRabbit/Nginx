@@ -256,6 +256,49 @@ server {
 
 (3)配置方法
 
-
+ip  a : 命令查看网卡绑定的IP，可用来查看nginx是否绑定keepalived的虚拟IP
 
 <img src="note-images/1649768520935.png" alt="1649768520935" style="zoom:50%;" />
+
+
+
+![1649944863524](note-images/1649944863524.png)
+
+
+
+### 11，Nginx工作原理
+
+![1649945058439](note-images/1649945058439.png)
+
+### 12，Nginx设置SSL范例
+
+https协议，SSL，工作项目实际设置范例
+
+```txt
+server {
+		listen       80;
+		listen       443 ssl;
+		server_name  yz.ukims.cn;
+
+		ssl_certificate      C:/java/nginx-1.19.8/ssl/6368174_yz.ukims.cn.pem;
+		ssl_certificate_key  C:/java/nginx-1.19.8/ssl/6368174_yz.ukims.cn.key;
+
+		ssl_session_cache    shared:SSL:1m;
+		ssl_session_timeout  5m;
+
+		ssl_ciphers  HIGH:!aNULL:!MD5;
+		ssl_prefer_server_ciphers  on;
+
+		# 讲打包好的dist目录文件1
+		root C:/java/miniapp/vue;
+		location ~* ^/(auth|code|upms|gen|weixin|mall|payapi|doc|webjars|swagger-resources) {
+		   proxy_pass http://127.0.0.1:9999;
+		   proxy_connect_timeout 15s;
+		   proxy_send_timeout 300s;
+		   proxy_read_timeout 300s;
+		   proxy_set_header X-Real-IP $remote_addr;
+		   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		}
+}
+```
+
