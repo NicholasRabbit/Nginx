@@ -310,4 +310,8 @@ tasklist : 找到nginx的进程列表
 
 taskkill  /f   /im  nginx.exe : 强制关闭所有nginx进程
 
+taskkill /f  /pid : 也可以根据pid关闭进程
+
 start  nginx.exe  : 在nginx.exe目录下使用powershell 执行，默认加载conf/nginx.conf
+
+二，有时启动nginx，会自动启动两个，需要根据pid关闭一个
