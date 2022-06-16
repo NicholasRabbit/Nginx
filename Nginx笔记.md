@@ -59,7 +59,7 @@ server {
 
 实现效果：
 
-访问：192.168.30.128：9001/tech/list.html，被反向代理到服务器的127.0.0.1：8081下Tomcat ../webapps/tech/lit.hml
+访问：192.168.30.128：9001/tech/list.html，被反向代理到服务器的127.0.0.1：8081下Tomcat ../webapps/tech/list.hml
 
 而访问：192.168.30.128：9001/pro/list.html，被反向代理到服务器的127.0.0.1：8082下Tomcat ../webapps/pro/list.hml
 
@@ -302,3 +302,12 @@ server {
 }
 ```
 
+### 13，windows服务器配置nginx注意事项
+
+一，nginx不加载配置文件解决办法
+
+tasklist : 找到nginx的进程列表
+
+taskkill  /f   /im  nginx.exe : 强制关闭所有nginx进程
+
+start  nginx.exe  : 在nginx.exe目录下使用powershell 执行，默认加载conf/nginx.conf
