@@ -121,9 +121,7 @@ location = | ~ | ~* uri {...}
 
  4、^~：用于不含正则表达式的 uri 前，要求 Nginx 服务器找到标识 uri 和请求字 
 
-符串匹配度最高的 location 后，立即使用此 location 处理请求，而不再使用 location  
-
-块中的正则 uri 和请求字符串做匹配。 
+符串匹配度最高的 location 后，立即使用此 location 处理请求，而不再使用 location  块中的正则 uri 和请求字符串做匹配。 
 
  注意：如果 uri 包含正则表达式，则必须要有 ~ 或者 ~* 标识。
 
@@ -315,3 +313,59 @@ taskkill /f  /pid : 也可以根据pid关闭进程
 start  nginx.exe  : 在nginx.exe目录下使用powershell 执行，默认加载conf/nginx.conf
 
 二，有时启动nginx，会自动启动两个，需要根据pid关闭一个
+
+### 14，多个服务公用80端口
+
+ 首先我们先在两个空闲的端口上分别部署项目（非80，假设是8080和8081），*nginx.conf*配置如下： 
+
+```groovy
+// nginx.conf
+# vue项目配置
+server {
+    listen       8080;
+    root         /web/vue-base-demo/dist/;
+    index        index.html;
+    location / {
+        try_files $uri $uri/ /index.html; # 路由模式history的修改
+    }
+}
+
+# react项目配置
+server {
+    listen       8081;
+    root         /web/react-base-demo/build;
+    index        index.html;
+    location / {}
+}
+```
+
+ 上面就是常规的配置，紧接着如果已经做好域名解析，希望vue.msg.com打开vue项目，react.msg.com打开react项目。我们需要再做两个代理，如下: 
+
+```groovy
+// nginx.conf
+# nginx 80端口配置 （监听vue二级域名）
+server {
+    listen  80;
+    server_name     vue.msg.com;
+    location / {
+        proxy_pass      http://localhost:8080; # 转发
+    }
+}
+
+# nginx 80端口配置 （监听react二级域名）
+server {
+    listen  80;
+    server_name     react.msg.com;
+    location / {
+        proxy_pass      http://localhost:8081; # 转发
+    }
+}
+
+```
+
+nginx如果检测到vue.msg.com的请求，将原样转发请求到本机的8080端口，如果检测到的是react.msg.com请求，也会将请求转发到8081端口。
+
+这样nginx对外就有四个服务，我们只需要公布80端口的就可以了，这样就实现了多个服务共用80端口。
+
+**个人总结：当检测到vue.msg.com访问时给转发到本地的8080，而检测到react.msg.com则转发到8081端口，这样就实现了多个服务公用80端口。**
+
