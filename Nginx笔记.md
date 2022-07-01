@@ -378,3 +378,60 @@ nginx如果检测到vue.msg.com的请求，将原样转发请求到本机的8080
 ### 16，Nginx错误日志位置
 
 ../logs/..  : 这里有有错误有运行日志，如果启动失败记得查看日志排查原因，不要立即百度。
+
+### 17，Nginx同时代理80和443的设置方式
+
+参照：工作配置范例，nginx-recycle.conf
+
+```txt
+ server {
+        #设置同时监听80，443端口即可
+        listen       80;
+	    listen       443 ssl;  
+        server_name  app.banmaaifenlei.com;
+        ....
+        
+        location /wms {
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto https;
+            proxy_pass   http://127.0.0.1:8083/wms;
+            proxy_redirect http:// https://;   #这里设置http,https都可访问到该项目
+        }
+}        
+```
+
+参考：https://blog.csdn.net/qq_35350654/article/details/107714593
+
+### 18，回收项目仓库模块访问报错总结
+
+**原因：**
+
+仓库模块设置的项目根路径是:  127.0.0.1:8083/，后面没有根路径名wms，如果按照下面的错误配置，地址：app.banmaaifenlei.com/wms对应访问的就是：http://127.0.0.1:8083/wms，而仓库中设置的根路径是：context-path: /，没有/wms，所以报错
+
+```txt
+#错误配置
+location ~ /wms/ {
+    proxy_pass   http://127.0.0.1:8083;
+}
+```
+
+**解决方案： ** 参照：工作配置范例，nginx-recycle.conf
+
+1. 设置仓库模块的项目根路径：context-path: /wms；
+2. location后写 /wms，不用上面的正则表达式了；
+
+```txt
+#正确配置
+#回收项目，仓库模块配置
+	location /wms {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+	    proxy_pass   http://127.0.0.1:8083/wms;
+	    proxy_redirect http:// https://;
+	}
+```
+
