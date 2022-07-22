@@ -90,12 +90,12 @@ server {
 server {
         listen       9001;
         server_name  192.168.30.128;
-        
-        location ~ /tech/ {  // "~"表示后边使用的是正则表达式，当外部访问/tech/时转到8081端口服务器
+        // "~"表示后边使用的是正则表达式，当外部访问/tech/时转到8081端口服务器的tech目录
+        location ~ /tech/ {  
 			proxy_pass   http://127.0.0.1:8081; 
         }
         
-        location ~ /learn/ {   //访问/learn/ 时转到8082端口的服务器
+        location ~ /pro/ {   //访问/learn/ 时转到8082端口的服务器的learn目录
 			proxy_pass   http://127.0.0.1:8082;
         }
 }
@@ -412,7 +412,7 @@ nginx如果检测到vue.msg.com的请求，将原样转发请求到本机的8080
 
 ```txt
 #错误配置
-location ~ /wms/ {
+location ~ /wms/ {  #项目中的context-path配置成
     proxy_pass   http://127.0.0.1:8083;
 }
 ```
