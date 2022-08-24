@@ -5,3 +5,4 @@
 2, ./nginx -v : 查看版本
 3, ./nginx -s stop : 停止nginx
 4, ./nginx -s reload : 重新加载nginx，同时起到重新加载nginx.conf文件的作用
+5, ./nginx -c /usr/local/nginx/conf/nginx-2.conf  : 启动时加载指定的文件
