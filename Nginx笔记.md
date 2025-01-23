@@ -59,9 +59,9 @@ server {
 
 实现效果：
 
-访问：192.168.30.128：9001/tech/list.html，被反向代理到服务器的127.0.0.1：8081下Tomcat ../webapps/tech/list.hml
+访问：192.168.30.128:9001/tech/list.html，被反向代理到服务器的127.0.0.1：8081下Tomcat ../webapps/tech/list.hml
 
-而访问：192.168.30.128：9001/pro/list.html，被反向代理到服务器的127.0.0.1：8082下Tomcat ../webapps/pro/list.hml
+而访问：192.168.30.128:9001/pro/list.html，被反向代理到服务器的127.0.0.1：8082下Tomcat ../webapps/pro/list.hml
 
 1）开启两个Tomcat，一个端口是8080，另一个是8081，8081端口的Tomcat需要改下配置文件，
 
